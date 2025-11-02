@@ -53,12 +53,18 @@
 <body class="bg-gradient-to-br from-blue-50 to-white min-h-screen">
 
     <!-- ===== মূল অ্যাপ কন্টেইনার ===== -->
-    <div id="app-container" class="max-w-md mx-auto min-h-screen bg-white/50 backdrop-blur-md shadow-2xl shadow-blue-100/50">
+    <!-- 'relative' যোগ করা হয়েছে যাতে "i" বাটনটি এর সাপেক্ষে পজিশন নিতে পারে -->
+    <div id="app-container" class="max-w-md mx-auto min-h-screen bg-white/50 backdrop-blur-md shadow-2xl shadow-blue-100/50 relative">
+
+        <!-- "i" Info Button (নতুন যোগ করা হয়েছে) -->
+        <button onclick="toggleModal('info-modal', true)" class="absolute top-4 left-4 z-40 bg-white/70 backdrop-blur-sm p-2.5 rounded-full shadow-md hover:bg-white transition-all active:scale-95">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-600"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+        </button>
 
         <!-- ===== ১. ড্যাশবোর্ড পেজ (প্রধান পেজ) ===== -->
         <div id="dashboard-page" class="page p-4 pb-24">
-            <!-- হেডার -->
-            <header class="text-center my-4">
+            <!-- হেডার (pt-12 যোগ করা হয়েছে বাটনের জন্য জায়গা রাখতে) -->
+            <header class="text-center my-4 pt-12">
                 <h1 class="text-3xl font-bold text-blue-700">Shop Hisab (Offline)</h1>
                 <p class="text-gray-600">দোকানের হিসাব রাখুন সহজে</p>
             </header>
@@ -95,8 +101,8 @@
 
         <!-- ===== ২. সাব-ক্যাটাগরি লিস্ট পেজ ===== -->
         <div id="subcategory-list-page" class="page hidden p-4 pb-24">
-            <!-- পেজ হেডার -->
-            <header class="flex items-center justify-between my-4">
+            <!-- পেজ হেডার (pt-12 যোগ করা হয়েছে) -->
+            <header class="flex items-center justify-between my-4 pt-12">
                 <button onclick="showPage('dashboard-page')" class="p-2 rounded-full hover:bg-gray-200 transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
                 </button>
@@ -134,8 +140,8 @@
         
         <!-- ===== ৩. লেনদেন ডিটেইলস পেজ (সাব-ক্যাটাগরি) ===== -->
         <div id="transaction-details-page" class="page hidden p-4 pb-24">
-            <!-- পেজ হেডার -->
-            <header class="flex items-center justify-between my-4">
+            <!-- পেজ হেডার (pt-12 যোগ করা হয়েছে) -->
+            <header class="flex items-center justify-between my-4 pt-12">
                 <button id="tx-details-back-btn" class="p-2 rounded-full hover:bg-gray-200 transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
                 </button>
@@ -174,7 +180,6 @@
     </div> <!-- /#app-container -->
 
     <!-- ===== মোডাল সেকশন ===== -->
-    <!-- (আগের কোডের সব মোডাল এখানে থাকবে) -->
 
     <!-- ১. নতুন ক্যাটাগরি মোডাল -->
     <div id="add-category-modal" class="fixed inset-0 z-40 flex justify-center items-end p-4 modal-overlay hidden">
@@ -280,32 +285,9 @@
         </div>
     </div>
 
-    <!-- ===== PWA Install Popup HTML ===== -->
-    <div id="install-popup" class="fixed bottom-4 left-4 right-4 max-w-md mx-auto bg-white p-4 rounded-lg shadow-lg z-50
-                                 flex items-center justify-between
-                                 transform transition-transform duration-300 ease-out translate-y-40
-                                 opacity-0 hidden">
-        <div class="flex items-center">
-            <img src="app-icon-192.png" alt="App Icon" class="w-10 h-10 mr-3 rounded-lg">
-            <div>
-                <h4 class="font-bold">📱 অ্যাপস ইনস্টল করুন</h4>
-                <p class="text-sm text-gray-600">অফলাইনে ব্যবহার করতে ইনস্টল করুন।</p>
-            </div>
-        </div>
-        <div class="flex gap-2">
-            <button id="install-button" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium text-sm whitespace-nowrap">Install Now</button>
-            <button id="close-install-popup" class="text-gray-500 p-1 text-2xl leading-none">&times;</button>
-        </div>
-    </div>
-
-
-    <!-- অফলাইন অ্যাপ লজিক -->
-    <script>
-        // গ্লোবাল ভেরিয়েবল (আগের মতোই)
-        let currentView = 'dashboard-page';
-        let currentCategoryId = null;
-        let currentCategoryType = 'expense';
-        let curre;
-            renderDashboard();
-            showPage('dashboard-page'); // নিশ্চিত করুন যে প্রথম পেজটি ড্যাশবোর্ড
-     
+    <!-- ৬. ইনফো মোডাল (Info Modal) (নতুন যোগ করা হয়েছে) -->
+    <div id="info-modal" class="fixed inset-0 z-50 flex justify-center items-center p-4 modal-overlay hidden">
+        <div class="w-full max-w-sm bg-white rounded-2xl p-6 shadow-lg text-center">
+            <h3 class="text-lg font-semibold text-gray-900 mb-5">সহায়িকা</h3>
+            <div class="space-y-3">
+                <a href="https://zunaidhosse.github.io/My-contact/" target="_blank" class="block w-full bg-blue-600 text-white 

@@ -1,15 +1,13 @@
-// ক্যাশের নাম এবং সংস্করণ (v4)
-const CACHE_NAME = 'shop-hisab-offline-cache-v4';
-// GitHub রিপোজিটরির পাথ
-const REPO_PATH = '/shop_hisab_offline';
+// ক্যাশের নাম এবং সংস্করণ (v5)
+const CACHE_NAME = 'shop-hisab-offline-cache-v5';
 
-// যে ফাইলগুলো ক্যাশ করা হবে (সঠিক পাথ সহ)
+// যে ফাইলগুলো ক্যাশ করা হবে (সঠিক রিলেটিভ পাথ সহ)
 const URLS_TO_CACHE = [
-  `${REPO_PATH}/`,
-  `${REPO_PATH}/index.html`,
-  `${REPO_PATH}/manifest.json`,
-  `${REPO_PATH}/app-icon-192.png`,
-  `${REPO_PATH}/app-icon-512.png`,
+  './',
+  './index.html',
+  './manifest.json',
+  './app-icon-192.png',
+  './app-icon-512.png',
   'https://cdn.tailwindcss.com',
   'https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap'
 ];
@@ -43,19 +41,20 @@ self.addEventListener('fetch', (event) => {
         }
         return fetch(event.request).then(
           (networkResponse) => {
-            if (networkResponse && networkResponse.status === 200 && event.request.method === 'GET') {
-              if (!event.request.url.startsWith('chrome-extension://')) {
-                const responseToCache = networkResponse.clone();
+            if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
+              // শুধুমাত্র বেসিক রিকুয়েস্ট ক্যাশ করুন (tailwind/fonts নয়)
+            } else if (networkResponse && networkResponse.status === 200) {
+               // থার্ড পার্টি রিসোর্স (tailwind, fonts) ক্যাশ করুন
+               const responseToCache = networkResponse.clone();
                 caches.open(CACHE_NAME)
                   .then(cache => {
                     cache.put(event.request, responseToCache);
                   });
-              }
             }
             return networkResponse;
           }
         ).catch(err => {
-            console.error('Fetch failed; returning offline page instead.', err);
+            console.error('Fetch failed:', err);
         });
       })
   );
@@ -63,43 +62,11 @@ self.addEventListener('fetch', (event) => {
 
 // Activate event: পুরোনো ক্যাশ পরিষ্কার করুন
 self.addEventListener('activate', (event) => {
-  const cacheWhitelist = [CACHE_NAME]; // v4 ক্যাশ রাখুন
+  const cacheWhitelist = [CACHE_NAME]; // v5 ক্যাশ রাখুন
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames.map((cacheName) => {
-          if (cacheWhitelist.indexOf(cacheName) === -1) {
-            console.log('Deleting old cache:', cacheName);
-            return caches.delete(cacheName);
-          }
-        })
-      );
-    })
-  );
-});
-
-.put(event.request, responseToCache);
-                  });
-              }
-            }
-            return networkResponse;
-          }
-        ).catch(err => {
-            console.error('Fetch failed; returning offline page instead.', err);
-            // ভবিষ্যতে এখানে একটি কাস্টম অফলাইন পেজ দেখানো যেতে পারে
-        });
-      })
-  );
-});
-
-// Activate event: পুরোনো ক্যাশ পরিষ্কার করুন
-self.addEventListener('activate', (event) => {
-  const cacheWhitelist = [CACHE_NAME]; // v2 ক্যাশ রাখুন
-  event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames.map((cacheName) => {
-          // যদি নতুন cacheWhitelist-এ না থাকে, তবে পুরোনো ক্যাশ ডিলিট করুন
           if (cacheWhitelist.indexOf(cacheName) === -1) {
             console.log('Deleting old cache:', cacheName);
             return caches.delete(cacheName);

@@ -3,13 +3,13 @@
   "short_name": "Shop Hisab",
   "icons": [
     {
-      "src": "/shop_hisab_offline/app-icon-192.png",
+      "src": "./app-icon-192.png",
       "type": "image/png",
       "sizes": "192x192",
       "purpose": "any maskable"
     },
     {
-      "src": "/shop_hisab_offline/app-icon-512.png",
+      "src": "./app-icon-512.png",
       "type": "image/png",
       "sizes": "512x512",
       "purpose": "any maskable"
@@ -17,8 +17,8 @@
   ],
   "theme_color": "#2196f3",
   "background_color": "#ffffff",
-  "start_url": "/shop_hisab_offline/index.html",
+  "start_url": "./index.html",
   "display": "standalone",
-  "scope": "/shop_hisab_offline/"
+  "scope": "."
 }
 
